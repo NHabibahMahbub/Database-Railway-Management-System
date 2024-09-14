@@ -1,0 +1,307 @@
+CREATE DATABASE railway;
+
+CREATE TABLE users (
+    u_id int NOT NULL PRIMARY KEY,
+    u_name varchar(100),
+    password varchar(100),
+    email varchar(100),
+    phone int,
+    address varchar(100)
+);
+
+CREATE TABLE passenger (
+    p_id int NOT NULL PRIMARY KEY,
+    p_name varchar(100),
+    age int,
+    gender varchar(100),
+    u_id int,
+    status_id int,
+    FOREIGN KEY (u_id) REFERENCES users(u_id),
+    FOREIGN KEY (status_id) REFERENCES train_status(status_id)
+);
+
+CREATE TABLE train (
+    t_id int NOT NULL PRIMARY KEY,
+    t_name varchar(100),
+    class_type varchar(100),
+    s_departure varchar(100),
+    s_destination varchar(100)
+);
+
+CREATE TABLE train_status (
+    status_id int NOT NULL PRIMARY KEY,
+    date varchar(100),
+    available_seat varchar(100),
+    booked_seat varchar(100),
+    t_id int,
+    FOREIGN KEY (t_id) REFERENCES train(t_id)
+);
+
+CREATE TABLE station (
+    station_id int NOT NULL PRIMARY KEY,
+    station_name varchar(100),
+    location varchar(100),
+    t_id int,
+    FOREIGN KEY (t_id) REFERENCES train(t_id)
+);
+
+CREATE TABLE timeTable (
+    time_id int NOT NULL PRIMARY KEY,
+    schedule varchar(100),
+    t_id int,
+    FOREIGN KEY (t_id) REFERENCES train(t_id)
+);
+
+CREATE TABLE ticket (
+    ticket_id int NOT NULL PRIMARY KEY,
+    class_type varchar(100),
+    seat_no varchar(100),
+    s_departure varchar(100),
+    s_destination varchar(100),
+    issu_date varchar(100),
+    journey_date varchar(100),
+    p_id int,
+    t_id int,
+    station_id int,
+    FOREIGN KEY (p_id) REFERENCES passenger(p_id),
+    FOREIGN KEY (t_id) REFERENCES train(t_id),
+    FOREIGN KEY (station_id) REFERENCES station(station_id)
+);
+ALTER TABLE ticket ADD pass_type varchar(100);
+
+CREATE TABLE special_ticket (
+    ticket_id int,
+    special_id int NOT NULL PRIMARY KEY,
+    discount varchar(100),
+    special_servic varchar(100),
+    class_type varchar(100),
+    seat_no varchar(100),
+    s_departure varchar(100),
+    s_destination varchar(100),
+    issu_date varchar(100),
+    journey_date varchar(100),
+    p_id int,
+    FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id),
+    FOREIGN KEY (p_id) REFERENCES passenger(p_id)
+);
+CREATE TABLE payment (
+    pay_id int NOT NULL PRIMARY KEY,
+    location varchar(100),
+    amount int,
+    pay_type varchar(100),
+    issue_date varchar(100),
+    issue_time varchar(100),
+    ticket_id int,
+    special_id int,
+    u_id int,
+    FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id),
+    FOREIGN KEY (u_id) REFERENCES users(u_id)
+);
+CREATE TABLE booking (
+    book_id int NOT NULL PRIMARY KEY,
+    book_date varchar(100),
+    seat_no varchar(100),
+    status varchar(100),
+    ticket_id int,
+    pay_id int,
+    u_id int,
+    FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id),
+    FOREIGN KEY (pay_id) REFERENCES payment(pay_id),
+    FOREIGN KEY (u_id) REFERENCES users(u_id)
+    
+);
+users table
+INSERT INTO `users`(`u_id`, `u_name`, `password`, `email`, `phone`, `address`) 
+VALUES ('21201107','maria','m123','m@gmail.com','011558899','jatrabari-1236');
+INSERT INTO `users`(`u_id`, `u_name`, `password`, `email`, `phone`, `address`) 
+VALUES ('21201108','rani','r123','r@gmail.com','011557799','farmgate-1236');
+INSERT INTO `users`(`u_id`, `u_name`, `password`, `email`, `phone`, `address`) 
+VALUES ('21201103','nur','n123','n@gmail.com','011668899','greenRoad-1236');
+INSERT INTO `users`(`u_id`, `u_name`, `password`, `email`, `phone`, `address`) 
+VALUES ('21201117','ahsan','a123','a@gmail.com','011658899','dhanmondi-1236');
+INSERT INTO `users`(`u_id`, `u_name`, `password`, `email`, `phone`, `address`) 
+VALUES ('21201114','ferdousi','f123','f@gmail.com','015557799','farmgate-1236');
+INSERT INTO `users`(`u_id`, `u_name`, `password`, `email`, `phone`, `address`) 
+VALUES ('21201120','habib','b123','b@gmail.com','011668999','greenRoad-1236');
+
+
+Passenger table
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('1','ahsan','22','male','21201107');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('2','jannat','22','female','21201108');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('3','asmani','23','male','21201103');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('4','sahtaz','24','female','21201107');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('5','mahi','22','female','21201107');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('6','alif','22','male','21201108');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('7','neha','23','female','21201103');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('8','ali','24','male','21201107');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('9','tareq','22','male','21201107');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('10','liza','22','female','21201108');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('11','ali','23','male','21201103');
+INSERT INTO `passenger`(`p_id`, `p_name`, `age`, `gender`, `u_id`)
+VALUES ('12','asha','24','female','21201107');
+
+
+Train_status
+INSERT INTO `train_status`(`status_id`, `date`, `available_seat`, `booked_seat`, `t_id`)
+VALUES ('1','11-11-2023','11C','1W','2');
+INSERT INTO `train_status`(`status_id`, `date`, `available_seat`, `booked_seat`, `t_id`)
+VALUES ('2','10-11-2023','13C','2W','2');
+INSERT INTO `train_status`(`status_id`, `date`, `available_seat`, `booked_seat`, `t_id`)
+VALUES ('3','9-11-2023','9C','7W','3');
+INSERT INTO `train_status`(`status_id`, `date`, `available_seat`, `booked_seat`, `t_id`)
+VALUES ('4','11-11-2023','15C','6W','4');
+INSERT INTO `train_status`(`status_id`, `date`, `available_seat`, `booked_seat`, `t_id`)
+VALUES ('5','10-11-2023','11C','12W','5');
+INSERT INTO `train_status`(`status_id`, `date`, `available_seat`, `booked_seat`, `t_id`)
+VALUES ('6','8-11-2023','14C','12W','5');
+INSERT INTO `train_status`(`status_id`, `date`, `available_seat`, `booked_seat`, `t_id`)
+VALUES ('7','9-11-2023','8C','17W','6');
+train
+INSERT INTO `train`(`t_id`, `t_name`, `class_type`, `s_departure`, `s_destination`) 
+VALUES ('1','Turna Express','1st Class AC','Dhaka','Cumilla');
+INSERT INTO `train`(`t_id`, `t_name`, `class_type`, `s_departure`, `s_destination`) 
+VALUES ('2','Paharika Express','1st Class','Dhaka','Sylhet');
+INSERT INTO `train`(`t_id`, `t_name`, `class_type`, `s_departure`, `s_destination`) 
+VALUES ('3','Meghna Express','2nd Class','Chandpur','chattogram');
+INSERT INTO `train`(`t_id`, `t_name`, `class_type`, `s_departure`, `s_destination`) 
+VALUES ('4','Mohanagar Express','1st Class Berth (sleeper)','Dhaka','Chattogram');
+INSERT INTO `train`(`t_id`, `t_name`, `class_type`, `s_departure`, `s_destination`) 
+VALUES ('5','Tista Express','1st Class AC','Cumilla','Chattogram');
+INSERT INTO `train`(`t_id`, `t_name`, `class_type`, `s_departure`, `s_destination`) 
+VALUES ('6','Bijoy Express','AC Berth (sleeper)','Dhaka','Cumilla');
+Timetable
+INSERT INTO `timetable`(`time_id`, `schedule`, `t_id`)
+VALUES ('1','22:50-6:30','1');
+INSERT INTO `timetable`(`time_id`, `schedule`, `t_id`)
+VALUES ('2','7:30-14:30','2');
+INSERT INTO `timetable`(`time_id`, `schedule`, `t_id`)
+VALUES ('3','20:00-6:00','3');
+INSERT INTO `timetable`(`time_id`, `schedule`, `t_id`)
+VALUES ('4','15:20-21:30','4');
+INSERT INTO `timetable`(`time_id`, `schedule`, `t_id`)
+VALUES ('5','7:30-12:30','5');
+INSERT INTO `timetable`(`time_id`, `schedule`, `t_id`)
+VALUES ('6','11:00-18:30','6');
+
+Station
+INSERT INTO `station`(`station_id`, `station_name`, `location`, `t_id`)
+VALUES ('1','Kamalapur Railway Station','Kamalapur','1');
+INSERT INTO `station`(`station_id`, `station_name`, `location`, `t_id`)
+VALUES ('2','Tejgaon Railway Station','Tejgaon','2');
+INSERT INTO `station`(`station_id`, `station_name`, `location`, `t_id`)
+VALUES ('3','Shyampur Baraitala Railway Station','Shyampur','3');
+INSERT INTO `station`(`station_id`, `station_name`, `location`, `t_id`)
+VALUES ('4','Kamalapur Railway Station','Kamalapur','4');
+INSERT INTO `station`(`station_id`, `station_name`, `location`, `t_id`)
+VALUES ('5','Cumilla Railway Station','Cumilla','5');
+INSERT INTO `station`(`station_id`, `station_name`, `location`, `t_id`)
+VALUES ('6','Chattogram Railway Station','Chattogram','6');
+
+Special ticket
+INSERT INTO `special_ticket`(`ticket_id`, `special_id`, `discount`, `special_servic`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`) 
+VALUES ('9','11101','50%','Catering Services & Premium Seating','First-Class','1C','Dhaka','Cumilla','22-10-2023','12-11-2023','5');
+INSERT INTO `special_ticket`(`ticket_id`, `special_id`, `discount`, `special_servic`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`) 
+VALUES ('10','11102','50%','Catering Services & Premium Seating','First-Class','2W','Dhaka','Cumilla','22-10-2023','12-11-2023','8');
+INSERT INTO `special_ticket`(`ticket_id`, `special_id`, `discount`, `special_servic`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`) 
+VALUES ('11','11103','50%','Catering Services & Premium Seating','First-Class','3C','Dhaka','Cumilla','22-10-2023','12-11-2023','12');
+
+Ticket
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`) 
+VALUES ('2','1st Class','12C','Dhaka','Cumilla','22-10-2023','13-11-2023','3','2','1');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`) 
+VALUES ('3','1st Class AC','13W','Cumilla','Dhaka','22-10-2023','14-11-2023','4','1','2');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`) 
+VALUES ('4','2nd Class AC','14C','Dhaka','Chattogram','22-10-2023','14-11-2023','6','3','5');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`) 
+VALUES ('5','2nd Class','15C','Chattogram','Cumilla','23-10-2023','15-11-2023','7','2','4');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`) 
+VALUES ('6','AC Berth (sleeper)','16W','Dhaka','Cumilla','22-10-2023','13-11-2023','9','2','2');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`) 
+VALUES ('7','1st Class','11C','Dhaka','Sylhet','24-10-2023','13-11-2023','10','2','3');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`) 
+VALUES ('8','1st Class AC','17W','Dhaka','Chandpur','25-10-2023','16-11-2023','11','2','2');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`, `pass_type`) VALUES ('9','First Class','1C','Dhaka','Cumilla','22-10-2023','12-11-2023','5','3','1','special');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`, `pass_type`) VALUES ('10','First Class','2W','Dhaka','Cumilla','22-10-2023','12-11-2023','8','3','1','special');
+INSERT INTO `ticket`(`ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `p_id`, `t_id`, `station_id`, `pass_type`) VALUES ('11','First Class','3C','Dhaka','Cumilla','22-10-2023','12-11-2023','12','3','1','special');
+Payment
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('1','Dhaka-Cumilla','800','Credit Card','22-10-2023','7:30','1','21201107');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('2','Dhaka-Cumilla','800','Cash','22-10-2023','6:30','2','21201108');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('3','Cumilla-Dhaka','800','Cash','23-10-2023','8:30','3','21201103');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('4','Dhaka-Chattogram','1200','Cash','24-10-2023','7:30','4','21201107');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('5','Dhaka-Sylhet','1500','Cash','22-10-2023','9:30','7','21201108');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('6','Chattogram-Cumilla','600','Debit Card','25-10-2023','7:30','5','21201107');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('7','Dhaka-Cumilla','400','Credit Card','22-10-2023','7:00','9','21201120');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('8','Dhaka-Cumilla','400','Cash','22-10-2023','8:00','10','21201120');
+INSERT INTO `payment`(`pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`) 
+VALUES ('9','Dhaka-Cumilla','400','Cash','22-10-2023','8:30','11','21201120');
+UPDATE `payment` SET `discount`='0%' where pay_id='1';
+UPDATE `payment` SET `discount`='0%' where pay_id='2';
+UPDATE `payment` SET `discount`='0%' where pay_id='3';
+UPDATE `payment` SET `discount`='0%' where pay_id='4';
+UPDATE `payment` SET `discount`='0%' where pay_id='5';
+UPDATE `payment` SET `discount`='0%' where pay_id='6';
+UPDATE `payment` SET `discount`='50%' where pay_id='7';
+UPDATE `payment` SET `discount`='50%' where pay_id='8';
+UPDATE `payment` SET `discount`='50%' where pay_id='9';
+
+
+booking
+INSERT INTO `booking`(`book_id`, `book_date`, `seat_no`, `status`, `ticket_id`, `pay_id`, `u_id`) 
+VALUES ('1','22-10-2023','11C','paid','1','1','21201114');
+INSERT INTO `booking`(`book_id`, `book_date`, `seat_no`, `status`, `ticket_id`, `pay_id`, `u_id`) 
+VALUES ('2','22-10-2023','12C','paid','2','2','21201117');
+INSERT INTO `booking`(`book_id`, `book_date`, `seat_no`, `status`, `ticket_id`, `pay_id`, `u_id`) 
+VALUES ('3','23-10-2023','13W','paid','3','3','21201114');
+INSERT INTO `booking`(`book_id`, `book_date`, `seat_no`, `status`, `ticket_id`, `pay_id`, `u_id`) 
+VALUES ('4','24-10-2023','14C','paid','4','4','21201117');
+INSERT INTO `booking`(`book_id`, `book_date`, `seat_no`, `status`, `ticket_id`, `pay_id`, `u_id`) 
+VALUES ('5','22-10-2023','15C','paid','7','7','21201114');
+INSERT INTO `booking`(`book_id`, `book_date`, `seat_no`, `status`, `ticket_id`, `pay_id`, `u_id`) 
+VALUES ('6','25-10-2023','16C','paid','5','5','21201114');
+
+
+
+
+Query:
+* SELECT * FROM `users` ;
+1.  SELECT count(distinct `p_id`) as total_passenger FROM `passenger` ;
+2. SELECT `p_id`, `p_name`, `age`, `gender`, `u_id` FROM `passenger` WHERE gender='female';
+3. SELECT `p_id`, `p_name`, `age`, `gender`, `u_id` FROM `passenger` WHERE p_name='ali';
+4. SELECT `u_id`, `u_name`, `password`, `email`, `phone`, `address` FROM `users` WHERE u_id like        '2______7';
+5. SELECT `ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `pass_type` FROM `ticket` WHERE pass_type='special';
+6. SELECT `ticket_id`, `class_type`, `seat_no`, `s_departure`, `s_destination`, `issu_date`, `journey_date`, `pass_type` FROM `ticket` WHERE pass_type='special' or s_departure='Dhaka' and s_destination='Cumilla';
+7. SELECT `pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`, `discount` FROM `payment` WHERE amount between 400 and 800;
+8. SELECT * FROM `ticket` WHERE station_id in (2,4) order by station_id;
+9. SELECT  `u_name` FROM `users`,passenger WHERE users.u_id = passenger.u_id ;
+10.SELECT  `p_name`, COUNT(*) as total FROM `passenger`,ticket WHERE 
+passenger.p_id = ticket.p_id  group by p_name order by total;
+11. SELECT * FROM ticket
+WHERE ticket_id NOT IN ( SELECT DISTINCT ticket_id FROM payment);
+12. SELECT `pass_type`, payment.discount FROM `ticket`,payment WHERE 	ticket.ticket_id = payment.ticket_id and discount='50%' ;
+13. SELECT `p_id`, `p_name`, `age`, `gender`, `u_id` FROM `passenger` WHERE u_id order by u_id desc ;
+14. SELECT upper(`u_name`), lower(passenger.p_name)  FROM `users`,passenger WHERE users.u_id = passenger.u_id order by users.u_name asc;
+15. SELECT  `t_name`, train_status.available_seat, `class_type`, `s_departure`, `s_destination` FROM `train`,train_status WHERE train.t_id = train_status.t_id and train.t_id=2 ;
+16. SELECT `date`, `available_seat`, `booked_seat` FROM `train_status`,passenger WHERE train_status.status_id = passenger.status_id ;
+17. SELECT `pay_id`, `location`, `amount`, `pay_type`, `issue_date`, `issue_time`, `ticket_id`, `u_id`, `discount` FROM `payment` WHERE pay_type like '%d' and pay_type like 'c%';
+18. SELECT `pay_id`, `location`, max(amount), min(amount), `ticket_id`,  `discount` FROM `payment` WHERE discount <> '50%' ;
+19. SELECT `p_name`, `age`, `gender`, `u_id` FROM `passenger`,ticket WHERE passenger.p_id = ticket.p_id and not ticket.ticket_id in (1,3,4,8,11) order by ticket.ticket_id ;
+20. SELECT sum(amount) FROM `payment` where ticket_id in(1,2) ;
